@@ -1,0 +1,36 @@
+package com.gptini.dto.response;
+
+import com.gptini.entity.ChatMessageEntity;
+import com.gptini.enums.MessageType;
+
+import java.time.LocalDateTime;
+
+public record ChatMessageResponse(
+        Long messageId,
+        Long roomId,
+        Long senderId,
+        String senderNickname,
+        String senderProfileImageUrl,
+        MessageType type,
+        String content,
+        String fileUrl,
+        String fileName,
+        LocalDateTime createdAt,
+        int unreadCount
+) {
+    public static ChatMessageResponse from(ChatMessageEntity message, int unreadCount) {
+        return new ChatMessageResponse(
+                message.getMessageId(),
+                message.getRoomId(),
+                message.getSender().getId(),
+                message.getSender().getNickname(),
+                message.getSender().getProfileImageUrl(),
+                message.getType(),
+                message.getContent(),
+                message.getFileUrl(),
+                message.getFileName(),
+                message.getCreatedAt(),
+                unreadCount
+        );
+    }
+}
