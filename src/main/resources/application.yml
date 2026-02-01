@@ -32,7 +32,7 @@ spring:
 
 # JWT
 jwt:
-  secret-key: Z3B0aW5pLWNoYXQtYXBwLXNlY3JldC1rZXktZm9yLWp3dC10b2tlbi1nZW5lcmF0aW9uLTIwMjY=
+  secret-key: ${JWT_SECRET}
   access-token-expiration: 86400000   # 1 day
   refresh-token-expiration: 604800000 # 7 days
 
