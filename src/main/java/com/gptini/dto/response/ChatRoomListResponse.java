@@ -2,7 +2,7 @@ package com.gptini.dto.response;
 
 import com.gptini.enums.ChatRoomType;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public record ChatRoomListResponse(
         Long id,
@@ -11,6 +11,6 @@ public record ChatRoomListResponse(
         int userCount,
         String lastMessage,
         String lastMessageSender,
-        LocalDateTime lastMessageTime,
+        ZonedDateTime lastMessageTime,
         long unreadCount
 ) {}

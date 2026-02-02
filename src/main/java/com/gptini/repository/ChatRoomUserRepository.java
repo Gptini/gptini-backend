@@ -14,10 +14,11 @@ public interface ChatRoomUserRepository extends JpaRepository<ChatRoomUserEntity
 
     Optional<ChatRoomUserEntity> findByUserAndChatRoom(UserEntity user, ChatRoomEntity chatRoom);
 
-    @Query("SELECT cru FROM ChatRoomUserEntity cru JOIN FETCH cru.chatRoom WHERE cru.user.id = :userId")
+    @Query("SELECT cru FROM ChatRoomUserEntity cru JOIN FETCH cru.chatRoom LEFT JOIN FETCH cru.chatRoom.users WHERE cru.user.id = :userId")
     List<ChatRoomUserEntity> findByUserIdWithChatRoom(@Param("userId") Long userId);
 
-    List<ChatRoomUserEntity> findByChatRoomId(Long chatRoomId);
+    @Query("SELECT cru FROM ChatRoomUserEntity cru JOIN FETCH cru.user WHERE cru.chatRoom.id = :chatRoomId")
+    List<ChatRoomUserEntity> findByChatRoomId(@Param("chatRoomId") Long chatRoomId);
 
     boolean existsByUserIdAndChatRoomId(Long userId, Long chatRoomId);
 

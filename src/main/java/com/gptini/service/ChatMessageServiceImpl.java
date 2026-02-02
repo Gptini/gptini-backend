@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +45,9 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
         Long messageId = counter.getNextMessageId();
 
-        // 메시지 저장
+        // 메시지 저장 (시간은 서버 수신 시점 기준)
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+
         ChatMessageEntity message = ChatMessageEntity.builder()
                 .messageId(messageId)
                 .roomId(roomId)
@@ -52,6 +56,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 .content(request.content())
                 .fileUrl(request.fileUrl())
                 .fileName(request.fileName())
+                .createdAt(now)
                 .build();
 
         chatMessageRepository.save(message);

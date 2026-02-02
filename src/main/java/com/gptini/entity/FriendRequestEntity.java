@@ -3,7 +3,8 @@ package com.gptini.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "friend_requests")
@@ -30,15 +31,15 @@ public class FriendRequestEntity {
     private FriendRequestStatus status;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private ZonedDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        createdAt = ZonedDateTime.now(ZoneOffset.UTC);
+        updatedAt = ZonedDateTime.now(ZoneOffset.UTC);
         if (status == null) {
             status = FriendRequestStatus.PENDING;
         }
@@ -46,7 +47,7 @@ public class FriendRequestEntity {
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+        updatedAt = ZonedDateTime.now(ZoneOffset.UTC);
     }
 
     public void accept() {

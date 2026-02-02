@@ -3,7 +3,8 @@ package com.gptini.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "friendships")
@@ -26,11 +27,11 @@ public class FriendshipEntity {
     private UserEntity friend;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        createdAt = ZonedDateTime.now(ZoneOffset.UTC);
     }
 
     public static FriendshipEntity create(UserEntity user, UserEntity friend) {

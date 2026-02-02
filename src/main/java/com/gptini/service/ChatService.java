@@ -5,7 +5,7 @@ import com.gptini.dto.response.ChatRoomListResponse;
 import com.gptini.dto.response.ChatRoomResponse;
 import com.gptini.dto.response.UserResponse;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +27,7 @@ public interface ChatService {
 
     record LatestMessageInfo(
             String content,
-            LocalDateTime createdAt,
+            ZonedDateTime createdAt,
             Long senderId,
             String senderNickname
     ) {}

@@ -2,14 +2,14 @@ package com.gptini.dto.response;
 
 import com.gptini.entity.FriendshipEntity;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public record FriendResponse(
         Long id,
         String email,
         String nickname,
         String profileImageUrl,
-        LocalDateTime friendSince
+        ZonedDateTime friendSince
 ) {
     public static FriendResponse from(FriendshipEntity friendship) {
         return new FriendResponse(

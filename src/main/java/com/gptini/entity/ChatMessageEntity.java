@@ -4,7 +4,8 @@ import com.gptini.enums.MessageType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "chat_messages")
@@ -40,10 +41,12 @@ public class ChatMessageEntity {
     private String fileName;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        if (createdAt == null) {
+            createdAt = ZonedDateTime.now(ZoneOffset.UTC);
+        }
     }
 }

@@ -3,13 +3,13 @@ package com.gptini.dto.response;
 import com.gptini.entity.FriendRequestEntity;
 import com.gptini.entity.FriendRequestStatus;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public record FriendRequestResponse(
         Long id,
         UserResponse requester,
         FriendRequestStatus status,
-        LocalDateTime createdAt
+        ZonedDateTime createdAt
 ) {
     public static FriendRequestResponse from(FriendRequestEntity request) {
         return new FriendRequestResponse(

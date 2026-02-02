@@ -1,12 +1,12 @@
 package com.gptini.dto.response;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public record RoomUpdateMessage(
         String type,
         Long roomId,
         String lastMessage,
-        LocalDateTime lastMessageTime,
+        ZonedDateTime lastMessageTime,
         Long lastMessageSenderId,
         String lastMessageSenderNickname,
         long unreadCount
@@ -14,7 +14,7 @@ public record RoomUpdateMessage(
     public static RoomUpdateMessage of(
             Long roomId,
             String lastMessage,
-            LocalDateTime lastMessageTime,
+            ZonedDateTime lastMessageTime,
             Long lastMessageSenderId,
             String lastMessageSenderNickname,
             long unreadCount

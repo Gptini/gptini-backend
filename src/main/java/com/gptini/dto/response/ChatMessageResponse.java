@@ -3,7 +3,7 @@ package com.gptini.dto.response;
 import com.gptini.entity.ChatMessageEntity;
 import com.gptini.enums.MessageType;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public record ChatMessageResponse(
         Long messageId,
@@ -15,7 +15,7 @@ public record ChatMessageResponse(
         String content,
         String fileUrl,
         String fileName,
-        LocalDateTime createdAt,
+        ZonedDateTime createdAt,
         int unreadCount
 ) {
     public static ChatMessageResponse from(ChatMessageEntity message, int unreadCount) {

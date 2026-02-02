@@ -3,7 +3,8 @@ package com.gptini.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "chat_room_users",
@@ -31,11 +32,11 @@ public class ChatRoomUserEntity {
     private Long lastReadMessageId = 0L;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime joinedAt;
+    private ZonedDateTime joinedAt;
 
     @PrePersist
     protected void onCreate() {
-        joinedAt = LocalDateTime.now();
+        joinedAt = ZonedDateTime.now(ZoneOffset.UTC);
     }
 
     public void updateLastReadMessageId(Long messageId) {

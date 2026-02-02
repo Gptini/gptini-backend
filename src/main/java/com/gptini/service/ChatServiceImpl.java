@@ -9,12 +9,14 @@ import com.gptini.enums.ChatRoomType;
 import com.gptini.exception.BusinessException;
 import com.gptini.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -43,6 +45,25 @@ public class ChatServiceImpl implements ChatService {
 
         // 채팅방 타입 결정
         ChatRoomType type = users.size() == 2 ? ChatRoomType.PRIVATE : ChatRoomType.GROUP;
+
+        // 1:1 채팅방인 경우 기존 채팅방 확인
+        if (type == ChatRoomType.PRIVATE) {
+            List<Long> userIdList = new ArrayList<>(userIds);
+            log.info("Checking existing private room for users: {} and {}", userIdList.get(0), userIdList.get(1));
+
+            Optional<ChatRoomEntity> existingRoom = chatRoomRepository.findPrivateRoomByUsers(
+                    ChatRoomType.PRIVATE,
+                    userIdList.get(0),
+                    userIdList.get(1)
+            );
+
+            log.info("Existing room found: {}", existingRoom.isPresent());
+
+            if (existingRoom.isPresent()) {
+                log.info("Returning existing room: {}", existingRoom.get().getId());
+                return ChatRoomResponse.from(existingRoom.get(), true);
+            }
+        }
 
         // 채팅방 생성
         ChatRoomEntity chatRoom = ChatRoomEntity.builder()
@@ -132,7 +153,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public ChatRoomResponse getChatRoom(Long userId, Long roomId) {
-        ChatRoomEntity chatRoom = chatRoomRepository.findById(roomId)
+        ChatRoomEntity chatRoom = chatRoomRepository.findByIdWithUsers(roomId)
                 .orElseThrow(() -> BusinessException.notFound("채팅방을 찾을 수 없습니다"));
 
         // 참여자인지 확인
