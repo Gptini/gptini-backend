@@ -15,10 +15,9 @@ public record ChatMessageResponse(
         String content,
         String fileUrl,
         String fileName,
-        ZonedDateTime createdAt,
-        int unreadCount
+        ZonedDateTime createdAt
 ) {
-    public static ChatMessageResponse from(ChatMessageEntity message, int unreadCount) {
+    public static ChatMessageResponse from(ChatMessageEntity message) {
         return new ChatMessageResponse(
                 message.getMessageId(),
                 message.getRoomId(),
@@ -29,8 +28,7 @@ public record ChatMessageResponse(
                 message.getContent(),
                 message.getFileUrl(),
                 message.getFileName(),
-                message.getCreatedAt(),
-                unreadCount
+                message.getCreatedAt()
         );
     }
 }

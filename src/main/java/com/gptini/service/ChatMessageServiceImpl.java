@@ -36,7 +36,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 .orElseThrow(() -> BusinessException.notFound("채팅방을 찾을 수 없습니다"));
 
         // 참여자 확인
-        ChatRoomUserEntity chatRoomUser = chatRoomUserRepository.findByUserAndChatRoom(sender, chatRoom)
+        chatRoomUserRepository.findByUserAndChatRoom(sender, chatRoom)
                 .orElseThrow(() -> BusinessException.forbidden("채팅방에 참여하지 않았습니다"));
 
         // 메시지 카운터 증가 (비관적 락)
@@ -61,13 +61,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
         chatMessageRepository.save(message);
 
-        // 발신자는 읽음 처리
-        chatRoomUser.updateLastReadMessageId(messageId);
-
-        // 안 읽은 사람 수 계산 (본인 제외)
-        int unreadCount = calculateUnreadCount(roomId, messageId);
-
-        return ChatMessageResponse.from(message, unreadCount);
+        return ChatMessageResponse.from(message);
     }
 
     @Override
@@ -91,32 +85,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         java.util.Collections.reverse(reversed);
 
         return reversed.stream()
-                .map(m -> ChatMessageResponse.from(m, calculateUnreadCount(roomId, m.getMessageId(), userId)))
+                .map(ChatMessageResponse::from)
                 .toList();
-    }
-
-    @Override
-    public int calculateUnreadCount(Long roomId, Long messageId) {
-        return calculateUnreadCount(roomId, messageId, null);
-    }
-
-    /**
-     * 안 읽은 사람 수 계산 (특정 유저 제외 가능)
-     */
-    public int calculateUnreadCount(Long roomId, Long messageId, Long excludeUserId) {
-        List<ChatRoomUserEntity> users = chatRoomUserRepository.findByChatRoomId(roomId);
-
-        int unreadCount = 0;
-        for (ChatRoomUserEntity user : users) {
-            // 제외할 유저는 건너뜀 (조회하는 본인)
-            if (excludeUserId != null && user.getUser().getId().equals(excludeUserId)) {
-                continue;
-            }
-            if (user.getLastReadMessageId() < messageId) {
-                unreadCount++;
-            }
-        }
-
-        return unreadCount;
     }
 }

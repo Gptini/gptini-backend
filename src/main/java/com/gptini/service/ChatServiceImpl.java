@@ -3,6 +3,7 @@ package com.gptini.service;
 import com.gptini.dto.request.CreateChatRoomRequest;
 import com.gptini.dto.response.ChatRoomListResponse;
 import com.gptini.dto.response.ChatRoomResponse;
+import com.gptini.dto.response.ChatRoomUserResponse;
 import com.gptini.dto.response.UserResponse;
 import com.gptini.entity.*;
 import com.gptini.enums.ChatRoomType;
@@ -180,6 +181,20 @@ public class ChatServiceImpl implements ChatService {
 
         return users.stream()
                 .map(cru -> UserResponse.from(cru.getUser()))
+                .toList();
+    }
+
+    @Override
+    public List<ChatRoomUserResponse> getParticipants(Long userId, Long roomId) {
+        // 참여자인지 확인
+        if (!chatRoomUserRepository.existsByUserIdAndChatRoomId(userId, roomId)) {
+            throw BusinessException.forbidden("채팅방에 참여하지 않았습니다");
+        }
+
+        List<ChatRoomUserEntity> users = chatRoomUserRepository.findByChatRoomId(roomId);
+
+        return users.stream()
+                .map(ChatRoomUserResponse::from)
                 .toList();
     }
 

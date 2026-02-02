@@ -11,7 +11,7 @@ public record ChatRoomResponse(
         String name,
         ChatRoomType type,
         ZonedDateTime createdAt,
-        List<UserResponse> users,
+        List<ChatRoomUserResponse> participants,
         boolean isExisting
 ) {
     public static ChatRoomResponse from(ChatRoomEntity chatRoom) {
@@ -19,8 +19,8 @@ public record ChatRoomResponse(
     }
 
     public static ChatRoomResponse from(ChatRoomEntity chatRoom, boolean isExisting) {
-        List<UserResponse> users = chatRoom.getUsers().stream()
-                .map(cru -> UserResponse.from(cru.getUser()))
+        List<ChatRoomUserResponse> participants = chatRoom.getUsers().stream()
+                .map(ChatRoomUserResponse::from)
                 .toList();
 
         return new ChatRoomResponse(
@@ -28,7 +28,7 @@ public record ChatRoomResponse(
                 chatRoom.getName(),
                 chatRoom.getType(),
                 chatRoom.getCreatedAt(),
-                users,
+                participants,
                 isExisting
         );
     }

@@ -7,6 +7,7 @@ import com.gptini.dto.response.ApiResponse;
 import com.gptini.dto.response.ChatMessageResponse;
 import com.gptini.dto.response.ChatRoomListResponse;
 import com.gptini.dto.response.ChatRoomResponse;
+import com.gptini.dto.response.ChatRoomUserResponse;
 import com.gptini.dto.response.UserResponse;
 import com.gptini.service.ChatMessageService;
 import com.gptini.service.ChatService;
@@ -67,6 +68,15 @@ public class ChatRoomController {
     @GetMapping("/{roomId}/users")
     public ResponseEntity<ApiResponse<List<UserResponse>>> getRoomUsers(@PathVariable Long roomId) {
         List<UserResponse> response = chatService.getRoomUsers(roomId);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @GetMapping("/{roomId}/participants")
+    public ResponseEntity<ApiResponse<List<ChatRoomUserResponse>>> getParticipants(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @PathVariable Long roomId
+    ) {
+        List<ChatRoomUserResponse> response = chatService.getParticipants(principal.userId(), roomId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
