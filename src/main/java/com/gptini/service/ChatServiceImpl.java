@@ -7,6 +7,7 @@ import com.gptini.dto.response.ChatRoomUserResponse;
 import com.gptini.dto.response.UserResponse;
 import com.gptini.entity.*;
 import com.gptini.enums.ChatRoomType;
+import com.gptini.enums.MessageType;
 import com.gptini.exception.BusinessException;
 import com.gptini.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -139,7 +140,7 @@ public class ChatServiceImpl implements ChatService {
                     room.getName(),
                     room.getType(),
                     room.getUsers().size(),
-                    lastMessage.map(ChatMessageEntity::getContent).orElse(null),
+                    lastMessage.map(m -> getMessagePreview(m.getType(), m.getContent())).orElse(null),
                     lastMessage.map(m -> m.getSender().getNickname()).orElse(null),
                     lastMessage.map(ChatMessageEntity::getCreatedAt).orElse(room.getCreatedAt()),
                     unreadCount
@@ -217,10 +218,17 @@ public class ChatServiceImpl implements ChatService {
     public Optional<LatestMessageInfo> getLatestMessageInfo(Long roomId) {
         return chatMessageRepository.findLatestByRoomId(roomId)
                 .map(msg -> new LatestMessageInfo(
-                        msg.getContent(),
+                        getMessagePreview(msg.getType(), msg.getContent()),
                         msg.getCreatedAt(),
                         msg.getSender().getId(),
                         msg.getSender().getNickname()
                 ));
+    }
+
+    private String getMessagePreview(MessageType type, String content) {
+        if (type == MessageType.TEXT) return content;
+        if (type == MessageType.GIF) return "(GIF)";
+        if (type == MessageType.IMAGE) return "(이미지)";
+        return "(파일)";
     }
 }

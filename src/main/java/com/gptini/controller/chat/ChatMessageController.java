@@ -6,6 +6,7 @@ import com.gptini.dto.request.UpdateReadRequest;
 import com.gptini.dto.response.ChatMessageResponse;
 import com.gptini.dto.response.RoomUpdateMessage;
 import com.gptini.entity.ChatRoomUserEntity;
+import com.gptini.enums.MessageType;
 import com.gptini.repository.ChatRoomUserRepository;
 import com.gptini.service.ChatMessageService;
 import com.gptini.service.ChatService;
@@ -68,7 +69,7 @@ public class ChatMessageController {
 
             RoomUpdateMessage roomUpdate = RoomUpdateMessage.of(
                     roomId,
-                    message.content(),
+                    getMessagePreview(message.type(), message.content()),
                     message.createdAt(),
                     message.senderId(),
                     message.senderNickname(),
@@ -129,6 +130,13 @@ public class ChatMessageController {
             }
         }
         throw new IllegalStateException("Unable to extract user ID from principal");
+    }
+
+    private String getMessagePreview(MessageType type, String content) {
+        if (type == MessageType.TEXT) return content;
+        if (type == MessageType.GIF) return "(GIF)";
+        if (type == MessageType.IMAGE) return "(이미지)";
+        return "(파일)";
     }
 
     public record ReadStatusUpdate(Long userId, Long messageId) {}
