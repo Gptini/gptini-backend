@@ -37,11 +37,13 @@ jwt:
   access-token-expiration: 86400000   # 1 day
   refresh-token-expiration: 604800000 # 7 days
 
-# AWS S3 (실제 배포시 설정)
+# AWS S3
 aws:
   s3:
-    bucket: gptini-files
+    bucket: ${S3_BUCKET}
     region: ap-northeast-2
+    access-key: ${AWS_ACCESS_KEY_ID}
+    secret-key: ${AWS_SECRET_ACCESS_KEY}
 
 server:
   port: 8080
