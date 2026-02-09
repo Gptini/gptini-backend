@@ -51,8 +51,7 @@ jobs:
             rm image.tar.gz
 
             # Stop existing container
-            docker stop gptini-backend || true
-            docker rm gptini-backend || true
+            docker rm -f gptini-backend || true
 
             # Run new container
             docker run -d \
