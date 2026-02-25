@@ -6,9 +6,9 @@ GitHub repo → Settings → Secrets and variables → Actions → New repositor
 
 | Secret 이름 | 값 | 설명 |
 |-------------|-----|------|
-| `EC2_HOST` | `3.37.92.94` | EC2 Elastic IP |
+| `EC2_HOST` |  | EC2 Elastic IP |
 | `EC2_SSH_KEY` | (pem 파일 내용 전체) | SSH 접속용 private key |
-| `DB_URL` | `jdbc:mysql://gptini-mysql.cng8oiqao5cb.ap-northeast-2.rds.amazonaws.com:3306/gptini` | RDS 접속 URL |
+| `DB_URL` |  | RDS 접속 URL |
 | `DB_USERNAME` | `gptini_admin` | DB 사용자명 |
 | `DB_PASSWORD` | (terraform.tfvars 값) | DB 비밀번호 |
 | `JWT_SECRET` | (openssl rand -base64 32 결과) | JWT 서명용 시크릿 |
@@ -77,7 +77,7 @@ openssl rand -base64 32
 
 ### EC2 접속
 ```bash
-ssh -i ~/path/to/gptini-keypair.pem ec2-user@3.37.92.94
+ssh -i ~/path/to/gptini-keypair.pem ec2-user@ec2-공개-아이피
 ```
 
 ### EC2에서 Docker 로그 확인
