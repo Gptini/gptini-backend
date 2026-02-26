@@ -58,7 +58,8 @@ public class WebSecurityConfig {
                 "http://localhost:*",
                 "http://127.0.0.1:*",
                 "https://gptini.org",
-                "https://www.gptini.org"
+                "https://www.gptini.org",
+                "https://gpt-ini.onrender.com"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
